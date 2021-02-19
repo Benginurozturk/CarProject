@@ -1,5 +1,7 @@
-﻿using DataAccess.Abstract;
+﻿using Core.Entities;
+using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,6 +68,16 @@ namespace DataAccess.Concrete.InMmeory
         }
 
         public Car Get(Expression<Func<Car, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailDto> GetCarDetails()
+        {
+            throw new NotImplementedException();
+        }
+
+        List<CarDetailDto> ICarDal.GetCarDetails()
         {
             throw new NotImplementedException();
         }
