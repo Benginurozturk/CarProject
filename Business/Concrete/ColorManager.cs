@@ -31,7 +31,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Color>> GetAll()
         {
-            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorsListed);
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(), Messages.ColorListed);
         }
 
 
@@ -43,7 +43,7 @@ namespace Business.Concrete
         public IResult Update(Color color)
         {
             _colorDal.Update(color);
-            return new SuccessResult(Messages.ColorUpdate);
+            return new SuccessResult(Messages.ColorUpdated);
         }
     }
 }

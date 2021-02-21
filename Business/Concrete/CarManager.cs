@@ -28,7 +28,7 @@ namespace Business.Concrete
             }
             else
             {
-                return new ErrorResult(Messages.CarDailyPriceInvalid);
+                return new ErrorResult(Messages.CarDailyInValid);
             }
         }
 
@@ -74,7 +74,7 @@ namespace Business.Concrete
             {
                 Console.WriteLine("Günlük fiyat 0'dan büyük olmalıdır.");
             }
-            return new SuccessResult(Messages.CarUpdate);
+            return new SuccessResult(Messages.CarUpdated);
         }
     }
     }

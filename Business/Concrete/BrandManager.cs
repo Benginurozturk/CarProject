@@ -27,7 +27,7 @@ namespace Business.Concrete
             }
             else
             {
-                return new ErrorResult(Messages.BrandNameInvalid);
+                return new ErrorResult(Messages.BrandDailyInValid);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Brand>> GetAll()
         {
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.BrandsListed);
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(), Messages.BrandListed);
 
 
         }
@@ -54,13 +54,13 @@ namespace Business.Concrete
             {
                 Console.WriteLine("Marka adı en az 2 karakter olmalıdır.");
             }
-            return new SuccessResult(Messages.BrandUpdate);
+            return new SuccessResult(Messages.BrandUpdated);
         }
         
        
         public IDataResult<Brand> GetCarsByBrandId(int brandId)
         {
-            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.Id == brandId), Messages.BrandsListed);
+            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.Id == brandId), Messages.BrandListed);
         }
     }
 }
