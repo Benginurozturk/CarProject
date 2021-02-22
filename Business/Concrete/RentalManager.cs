@@ -19,7 +19,7 @@ namespace Business.Concrete
         }
         public IResult Add(Rental rental)
         {
-            if (rental.ReturnDate == null && _rentalDal.GetCarDetails(r => r.CarId == rental.CarId).Count > 0)
+            if (rental.ReturnDate == null && _rentalDal.GetCarDetails(r => r.CarID == rental.CarID).Count > 0)
             {
                 new ErrorResult(Messages.RentalFailedAddOrUpdate);
             }
@@ -40,7 +40,7 @@ namespace Business.Concrete
 
         public IDataResult<Rental> GetByRentalId(int rentalId)
         {
-            return new SuccessDataResult<Rental>(_rentalDal.Get(r => r.RentalId == rentalId));
+            return new SuccessDataResult<Rental>(_rentalDal.Get(r => r.RentalID == rentalId));
         }
 
         public IDataResult<List<RentalDetailDto>> GetRentalDetails()
