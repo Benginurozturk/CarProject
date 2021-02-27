@@ -37,7 +37,8 @@ namespace WebAPI.Controllers
             }
 
             string imageName = Guid.NewGuid().ToString();
-            string fullPath = path + imageName;
+            string type = Path.GetExtension(file.files.FileName);
+            string fullPath = path + imageName + type;
             var businessRule = _carImageService.CheckIfImageLimitExceded(file.CarId);
             if (businessRule.Success)
             {
@@ -50,7 +51,7 @@ namespace WebAPI.Controllers
 
                 }
             }
-            CarImage carImage = new CarImage { ImagePath = fullPath, CarId = file.CarId };
+            CarImage carImage = new CarImage { ImagePath = ("\\images\\" + imageName + type).Replace("\\","/"), CarId = file.CarId };
             var result = _carImageService.Add(carImage);
 
             if (result.Success)
