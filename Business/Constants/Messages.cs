@@ -44,5 +44,6 @@ namespace Business.Constants
 
         public static string CheckIfImageLimitExceded = "En fazla 5 tane fotoğraf yüklenebilir.";
         public static string CheckIfCarImageNull = "Eğer bir arabaya ait resim yoksa logo göstersin";
+        public static string AuthorizationDenied = "Bu işlem için yetkiniz bulunmuyor.";
     }
 }
