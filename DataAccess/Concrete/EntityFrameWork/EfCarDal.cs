@@ -13,7 +13,7 @@ namespace DataAccess.Concrete.EntityFrameWork
 {
     public class EfCarDal : EfEntityRepositoryBase<Car, ReCapProjectContext>, ICarDal
     {
-        public List<CarDetailDto> GetCarDetails()
+        public List<CarDetailDto> GetCarDetails(Expression<Func<CarDetailDto, bool>> filter = null)
         {
             using (ReCapProjectContext context = new ReCapProjectContext())
             {
@@ -28,8 +28,11 @@ namespace DataAccess.Concrete.EntityFrameWork
                                  DailyPrice = c.DailyPrice,
                                  ModelYear = c.ModelYear,
                                  CarID = c.CarID,
+                                 BrandID = c.BrandID,
+                                 ColorID = c.ColorID
                              };
-                return result.ToList();
+                return filter==null? result.ToList():result.Where(filter).ToList()
+                    ;
 
             }
         }

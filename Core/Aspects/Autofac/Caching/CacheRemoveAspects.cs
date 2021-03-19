@@ -9,12 +9,12 @@ using Core.Utilities.Interceptors;
 
 namespace Core.Aspects.Autofac.Caching
 {
-    public class CacheRemoveAspects : MethodInterception
+    public class CacheRemoveAspect : MethodInterception
     {
-        private string _pattern;
-        private ICacheManager _cacheManager;
+        private readonly ICacheManager _cacheManager;
+        private readonly string _pattern;
 
-        public CacheRemoveAspects(string pattern)
+        public CacheRemoveAspect(string pattern)
         {
             _pattern = pattern;
             _cacheManager = ServiceTool.ServiceProvider.GetService<ICacheManager>();
@@ -25,5 +25,6 @@ namespace Core.Aspects.Autofac.Caching
             _cacheManager.RemoveByPattern(_pattern);
         }
     }
-
 }
+
+
