@@ -76,5 +76,7 @@ namespace Business.Constants
         public static string CarImageDeleted = "Araç fotoğrafı silindi.";
         public static string CarImageCountOfCarError = "İlgili araca ait fotoğraf adedi maksimum sayıdadır.";
 
+        public static string CanRent = "Araç müsait";
+        public static string CantRent = "Araç müsait değil";
     }
 }
