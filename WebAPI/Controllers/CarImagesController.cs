@@ -59,6 +59,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
+        [DisableRequestSizeLimit]
         public IActionResult Add([FromForm] CarImage carImage, [FromForm(Name = "Image")] IFormFile file)
         {
             var result = _carImageService.Add(carImage, file);

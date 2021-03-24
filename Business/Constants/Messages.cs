@@ -38,6 +38,11 @@ namespace Business.Constants
         public static string RentalUpdated = "Araba kiralama işlemi güncellendi";
         public static string RentalFailedAddOrUpdate = "Bu araba henüz teslim edilmediği için kiralayamazsınız";
         public static string RentalReturned = "Kiraladığınız araç teslim edildi";
+        
+        
+        
+        public static string RentalUndeliveredCar = "Araç henüz teslim edilmedi.";
+        public static string RentalNotAvailable = "Kiralama işlemi seçilen tarihler arasında uygun değil.";
 
         public static string CheckIfImageLimitExceded = "En fazla 5 tane fotoğraf yüklenebilir.";
         public static string CheckIfCarImageNull = "Eğer bir arabaya ait resim yoksa logo göstersin";
@@ -78,5 +83,11 @@ namespace Business.Constants
 
         public static string CanRent = "Araç müsait";
         public static string CantRent = "Araç müsait değil";
+
+        public static string PaymentFailed = "Payment failed.";
+        public static string PaymentSuccessful = "Payment Successful.";
+        public static string CalculatedPricePerMinute = "Aracın dakikalık fiyatı hesaplandı.";
+        public static string CarNotFound = "Araç bulunamadı.";
     }
+
 }

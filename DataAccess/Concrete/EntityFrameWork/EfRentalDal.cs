@@ -29,12 +29,12 @@ namespace DataAccess.Concrete.EntityFrameWork
                                  on cu.UserID equals u.UserID
                                  select new RentalDetailDto
                                  {
-                                     RentalID = r.RentalID,
+                                     Id = r.Id,
                                      CarName = b.BrandName,
                                      CompanyName = cu.CompanyName,
                                      UserName = u.UserFirstName + u.UserLastName,
-                                     RentDate = r.RentDate,
                                      ReturnDate = r.ReturnDate,
+                                     RentDate = r.RentEndDate,
                                      FirstName = u.UserFirstName,
                                      LastName = u.UserLastName
                                  };

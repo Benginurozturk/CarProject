@@ -52,7 +52,7 @@ namespace Business.Concrete
         }
 
         [SecuredOperation("car.add,moderator,admin")]
-       
+
         [CacheRemoveAspect("ICarService.Get")]
         public IResult Add(Car car)
         {
@@ -61,7 +61,7 @@ namespace Business.Concrete
         }
 
         [SecuredOperation("car.update,moderator,admin")]
-        
+
         [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
@@ -75,6 +75,36 @@ namespace Business.Concrete
         {
             _carDal.Delete(car);
             return new SuccessResult(Messages.CarDeleted);
+        }
+
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByBrandName(string name)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.BrandName == name));
+        }
+
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByColorName(string name)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.ColorName == name));
+        }
+
+        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarDetailsByBrandNameAndColorName(string brandName, string colorName)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c =>
+                c.BrandName == brandName && c.ColorName == colorName));
+        }
+
+        public IDataResult<decimal> CalculatePriceById(int id)
+        {
+            Car findedCar = _carDal.Get(car => car.CarID == id);
+            if (findedCar == null)
+                return new ErrorDataResult<decimal>(0, Messages.CarNotFound);
+
+            decimal totalPrice = findedCar.DailyPrice / (60 * 24);
+
+            return new SuccessDataResult<decimal>(totalPrice, Messages.CalculatedPricePerMinute);
         }
     }
 }

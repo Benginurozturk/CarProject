@@ -1,19 +1,16 @@
-﻿using Core.Entities;
+﻿using Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Entities.Concrete
+namespace Entities.DTOs
 {
-    public class Rental : IEntity
+    public class RentalAddDto : IDto
     {
-        public int Id { get; set; }
-        public int CarID { get; set; }
-        public int CustomerID { get; set; }
+        public string CarId { get; set; }
+        public int CustomerId { get; set; }
         public DateTime RentStartDate { get; set; }
         public DateTime RentEndDate { get; set; }
-        
         public DateTime? ReturnDate { get; set; }
     }
-
 }

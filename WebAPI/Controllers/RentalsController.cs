@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -33,10 +34,28 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
+        [HttpPost("isrentable")]
+        public IActionResult IsRentable(Rental rental)
+        {
+            var result = _rentalService.IsRentable(rental);
+            if (result.Success) return Ok(result);
+
+            return BadRequest(result);
+        }
+
         [HttpPost("add")]
         public IActionResult Add(Rental rental)
         {
             var result = _rentalService.Add(rental);
+            if (result.Success) return Ok(result);
+
+            return BadRequest(result);
+        }
+
+        [HttpPost("adddto")]
+        public IActionResult AddDto(RentalAddDto rentalAddDto)
+        {
+            var result = _rentalService.AddDto(rentalAddDto);
             if (result.Success) return Ok(result);
 
             return BadRequest(result);

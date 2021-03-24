@@ -1,54 +1,45 @@
-﻿using Business.Abstract;
+﻿using System;
+using Business.Abstract;
+using Business.Constants;
 using Core.Utilities.Results;
+using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFrameWork;
+using Entities.Concrete;
 using Entities.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Business.Concrete
 {
     public class PaymentManager : IPaymentService
     {
-        public IResult Pay(CreditCard creditCard)
+        private readonly IPaymentDal _paymentDal;
+
+        public PaymentManager(IPaymentDal paymentDal)
         {
-            var result = CheckCreditCart(creditCard);
-            if (result == true)
-            {
-                return new SuccessResult("Çekim Başarılı");
-            }
-            else
-            {
-                return new ErrorResult("Çekim Başarısız");
-            }
+            _paymentDal = paymentDal;
         }
 
-        public bool CheckCreditCart(CreditCard creditCard)
+        public IResult Add(PaymentAddDto paymentAddDto)
         {
-            int firstCardNumber = Convert.ToInt32(creditCard.creditNumber.Substring(0, 1));
-            int firstCardCVV = Convert.ToInt32(creditCard.cardCVV.Substring(0, 1));
-            if (firstCardNumber % 2 == 0)
+            Payment paymentToAdd = new Payment()
             {
-                if (firstCardCVV % 2 == 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if (firstCardCVV % 2 == 1)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+                NameOnCard = paymentAddDto.NameOnCard,
+                CardCVV = paymentAddDto.CardCVV,
+                CreditNumber = paymentAddDto.CreditNumber,
+                TotalPrice = paymentAddDto.TotalPrice,
+                RentalId = paymentAddDto.RentalId
+            };
+
+            _paymentDal.Add(paymentToAdd);
+
+            return new SuccessResult(Messages.PaymentSuccessful);
+        }
+
+        public IResult test() // Test
+        {
+            var rd = new Random().Next(2);
+            if (rd == 0) return new ErrorResult(Messages.PaymentFailed);
+
+            return new SuccessResult(Messages.PaymentSuccessful);
         }
     }
-
 }

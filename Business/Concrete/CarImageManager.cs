@@ -46,7 +46,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarImage>>(result);
         }
 
-        [SecuredOperation("carimage.add,moderator,admin")]
+        //[SecuredOperation("carimage.add,moderator,admin")]
         [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Add(CarImage carImage, IFormFile file)
         {
@@ -56,6 +56,7 @@ namespace Business.Concrete
 
             carImage.ImagePath = new FileManagerOnDisk().Add(file, CreateNewPath(file));
             carImage.Date = DateTime.Now;
+            carImage.ImagePath = DeleteBaseProjectPath(carImage.ImagePath);
             _carImageDal.Add(carImage);
             return new SuccessResult(Messages.CarImageAdded);
         }
@@ -68,6 +69,7 @@ namespace Business.Concrete
             carImage.CarId = carImageToUpdate.CarId;
             carImage.ImagePath = new FileManagerOnDisk().Update(carImageToUpdate.ImagePath, file, CreateNewPath(file));
             carImage.Date = DateTime.Now;
+            carImage.ImagePath = DeleteBaseProjectPath(carImage.ImagePath);
             _carImageDal.Update(carImage);
             return new SuccessResult(Messages.CarImageUpdated);
         }
@@ -96,7 +98,7 @@ namespace Business.Concrete
             var defaultCarImage = new CarImage
             {
                 ImagePath =
-                    $@"{Environment.CurrentDirectory}\images\logo.jpg",
+                    $@"{Environment.CurrentDirectory}\wwwrot/images\logo.jpg",
                 Date = DateTime.Now
             };
             return defaultCarImage;
@@ -106,9 +108,14 @@ namespace Business.Concrete
         {
             var fileInfo = new FileInfo(file.FileName);
             var newPath =
-                $@"{Environment.CurrentDirectory}\Public\Images\CarImage\Upload\{Guid.NewGuid()}_{DateTime.Now.Month}_{DateTime.Now.Day}_{DateTime.Now.Year}{fileInfo.Extension}";
+                $@"{Environment.CurrentDirectory}\wwwroot\images\{Guid.NewGuid()}_{DateTime.Now.Month}_{DateTime.Now.Day}_{DateTime.Now.Year}{fileInfo.Extension}";
 
             return newPath;
+        }
+        private string DeleteBaseProjectPath(string longPath)
+        {
+            return longPath.Replace($@"{Environment.CurrentDirectory}\wwwroot", "");
+
         }
 
         private IResult CheckIfCarImageCountOfCarCorrect(int carId)
