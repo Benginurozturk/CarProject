@@ -86,7 +86,7 @@ namespace Business.Concrete
 
         //[SecuredOperation("user,rental.add,moderator,admin")]
         [ValidationAspect(typeof(RentalValidator))]
-        public IResult AddDto(RentalAddDto rentalAddDto)
+        public IDataResult<int> AddDto(RentalAddDto rentalAddDto)
         {
             Rental rentalToAdd = new Rental()
             {
@@ -99,7 +99,7 @@ namespace Business.Concrete
 
             _rentalDal.Add(rentalToAdd);
 
-            return new SuccessResult(Messages.RentalAdded);
+            return new SuccessDataResult<int>(rentalToAdd.Id,Messages.RentalAdded);
         }
     }
 }

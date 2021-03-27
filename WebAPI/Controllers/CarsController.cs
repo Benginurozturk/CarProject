@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -113,5 +114,14 @@ namespace WebAPI.Controllers
 
             return BadRequest(result);
         }
+        [HttpPost("calculateprice")]
+        public IActionResult CalculatePrice(CarDateCalculateDto carDateCalculateDto)
+        {
+            var result = _carService.CalculatePrice(carDateCalculateDto);
+            if (result.Success) return Ok(result);
+
+            return BadRequest(result);
+        }
+
     }
 }

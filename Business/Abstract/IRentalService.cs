@@ -15,7 +15,7 @@ namespace Business.Abstract
 
         IResult Add(Rental rental);
 
-        IResult AddDto(RentalAddDto rentalAddDto);
+        IDataResult<int> AddDto(RentalAddDto rentalAddDto);
 
         IResult Update(Rental rental);
 

@@ -29,6 +29,6 @@ namespace Business.Abstract
 
         IResult Delete(Car car);
 
-        IDataResult<decimal> CalculatePriceById(int id);
+        IDataResult<decimal> CalculatePrice(CarDateCalculateDto carDateCalculateDto );
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
@@ -96,15 +97,19 @@ namespace Business.Concrete
                 c.BrandName == brandName && c.ColorName == colorName));
         }
 
-        public IDataResult<decimal> CalculatePriceById(int id)
+        public IDataResult<decimal> CalculatePrice(CarDateCalculateDto carDateCalculateDto)
         {
-            Car findedCar = _carDal.Get(car => car.CarID == id);
+            Car findedCar = _carDal.Get(car => car.CarID == carDateCalculateDto.CarId);
             if (findedCar == null)
                 return new ErrorDataResult<decimal>(0, Messages.CarNotFound);
 
-            decimal totalPrice = findedCar.DailyPrice / (60 * 24);
+            TimeSpan different = carDateCalculateDto.ReturnDate - carDateCalculateDto.RentDate;
 
-            return new SuccessDataResult<decimal>(totalPrice, Messages.CalculatedPricePerMinute);
+            decimal totalPrice = findedCar.DailyPrice * Convert.ToDecimal(different.TotalMinutes)/(60*24);
+
+            decimal celinigPrice = Math.Ceiling(totalPrice);
+
+            return new SuccessDataResult<decimal>(celinigPrice, Messages.CalculatedPricePerMinute);
         }
     }
 }

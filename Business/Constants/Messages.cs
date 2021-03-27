@@ -86,7 +86,7 @@ namespace Business.Constants
 
         public static string PaymentFailed = "Payment failed.";
         public static string PaymentSuccessful = "Payment Successful.";
-        public static string CalculatedPricePerMinute = "Aracın dakikalık fiyatı hesaplandı.";
+        public static string CalculatedPricePerMinute = "Aracın toplam fiyatı hesaplandı.";
         public static string CarNotFound = "Araç bulunamadı.";
     }
 
