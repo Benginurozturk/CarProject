@@ -59,7 +59,10 @@ namespace WebAPI
                 };
             });
             //ServiceTool.Create(services);
-            services.AddDependencyResolvers(new CoreModule());
+
+            services.AddDependencyResolvers(new ICoreModule[] {
+                new CoreModule()
+            });
 
             //services.AddSingleton<IBrandService, BrandManager>();
             //services.AddSingleton<IBrandDal, EfBrandDal>();

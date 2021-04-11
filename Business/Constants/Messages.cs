@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -59,6 +60,8 @@ namespace Business.Constants
         public static string UserEmailAlreadyExists = "Bu email adresine sahip bir kullanıcı zaten bulunuyor.";
         public static string UserRegistered = "Kullanıcı başarıyla kayıt edildi.";
         public static string UserAccessTokenCreatedSuccessful = "Access token başarıyla oluşturuldu.";
+        public static string UserAlreadyExists = "Access token dan çıkış yapıldı";
+       
 
         public static string UserAddSuccess = "Kullanıcı başarılı bir şekilde eklendi.";
         public static string UserUpdateSuccess = "Kullanıcı başarılı bir şekilde güncellendi.";
@@ -88,6 +91,29 @@ namespace Business.Constants
         public static string PaymentSuccessful = "Payment Successful.";
         public static string CalculatedPricePerMinute = "Aracın toplam fiyatı hesaplandı.";
         public static string CarNotFound = "Araç bulunamadı.";
-    }
 
+        public static string UserOperationClaimAdded = "User operation claim has added.";
+        public static string UserOperationClaimUpdated = "User operation claim has updated.";
+        public static string UserOperationClaimDeleted = "User operation claim has deleted.";
+
+        public static string OperationClaimAdded = "Operation claim has added.";
+        public static string OperationClaimUpdated = "Operation claim has updated.";
+        public static string OperationClaimDeleted = "Operation claim has deleted.";
+
+        public static string FindeksAdded = "Findeks point has added.";
+        public static string FindeksUpdated = "Findeks point has updated.";
+        public static string FindeksDeleted = "Findeks point has deleted.";
+        public static string FindeksNotEnoughForCar = "Findeks point is not enough for the car.";
+        public static string FindeksNotFound = "You have to add your findeks score.";
+
+        public static string UserDetailsUpdated = "User details have been updated.";
+        public static string UserAuthorized = "User authorized.";
+        public static string UserGetByMailSuccess = "Maile göre kullanıcı getirildi.";
+        public static readonly string creditCardAdded = "Credit card has added.";
+        public static readonly string creditCardDeleted = "Credit card has deleted.";
+    }
 }
+
+    
+
+

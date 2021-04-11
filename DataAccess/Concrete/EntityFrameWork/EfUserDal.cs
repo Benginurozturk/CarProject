@@ -5,20 +5,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Entities.DTOs;
 
 namespace DataAccess.Concrete.EntityFrameWork
 {
     public class EfUserDal : EfEntityRepositoryBase<User, ReCapProjectContext>, IUserDal
     {
-        public List<OperationClaimDto> GetClaims(User user)
+        public List<OperationClaim> GetClaims(User user)
         {
             using (var context = new ReCapProjectContext())
             {
                 var result = from operationClaim in context.OperationClaims
                              join userOperationClaim in context.UserOperationClaims on operationClaim.Id equals
                                  userOperationClaim.OperationClaimId
-                             where userOperationClaim.UserId == user.UserID
-                             select new OperationClaimDto()
+                             where userOperationClaim.UserId == user.Id
+                             select new OperationClaim()
                              {
                                  Id = operationClaim.Id,
                                  Name = operationClaim.Name
@@ -26,6 +27,33 @@ namespace DataAccess.Concrete.EntityFrameWork
                 return result.ToList();
             }
 
+            
         }
+
+        public UserDetailDto GetUserDetail(string userMail)
+        {
+            using (var context = new ReCapProjectContext())
+            {
+                var result =
+                    from u in context.Users
+                    join c in context.Customers
+                    on u.Id equals c.UserID
+                    where u.Email == userMail
+
+                    select new UserDetailDto
+                    {
+                        Id = u.Id,
+                        CustomerId = c.CustomerID,
+                        FirstName = u.FirstName,
+                        LastName = u.LastName,
+                        Email = u.Email,
+                        CompanyName = c.CompanyName
+
+                    };
+                return result.ToList()[0];
+            }
+        }
+
+      
     }
 }

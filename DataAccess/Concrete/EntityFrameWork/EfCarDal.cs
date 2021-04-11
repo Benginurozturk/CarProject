@@ -31,9 +31,7 @@ namespace DataAccess.Concrete.EntityFrameWork
                                  BrandID = c.BrandID,
                                  ColorID = c.ColorID
                              };
-                return filter==null? result.ToList():result.Where(filter).ToList()
-                    ;
-
+                return filter == null ? result.ToList() : result.Where(filter).ToList();
             }
         }
     }

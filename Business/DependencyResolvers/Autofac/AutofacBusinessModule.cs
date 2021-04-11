@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Text;
 using Core.Utilities.Interceptors;
 using Core.Utilities.Security.JWT;
+using Module = Autofac.Module;
+using DataAccess.Concrete.EntityFramework;
 
 namespace Business.DependencyResolvers.Autofac
 {
@@ -44,6 +46,20 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<PaymentManager>().As<IPaymentService>();
             builder.RegisterType<EfPaymentDal>().As<IPaymentDal>();
+
+            builder.RegisterType<CreditCardManager>().As<ICreditCardService>().SingleInstance();
+            builder.RegisterType<EfCreditCardDal>().As<ICreditCardDal>().SingleInstance();
+
+            builder.RegisterType<FakeFindeksManager>().As<IFindeksService>().SingleInstance();
+            builder.RegisterType<EfFindeksDal>().As<IFindeksDal>().SingleInstance();
+
+            builder.RegisterType<FakePaymentManager>().As<IPaymentService>().SingleInstance();
+
+            builder.RegisterType<OperationClaimManager>().As<IOperationClaimService>().SingleInstance();
+            builder.RegisterType<EfOperationClaimDal>().As<IOperationClaimDal>().SingleInstance();
+
+            builder.RegisterType<UserOperationClaimManager>().As<IUserOperationClaimService>().SingleInstance();
+            builder.RegisterType<EfUserOperationClaimDal>().As<IUserOperationClaimDal>().SingleInstance();
 
 
             //builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>();

@@ -15,8 +15,8 @@ namespace WebAPI.Controllers
             _paymentService = paymentService;
         }
 
-        [HttpGet("test")]
-        public IActionResult Test() // Test
+        [HttpGet("payment")]
+        public IActionResult Payment() // Test
         {
             var result = _paymentService.test();
             if (result.Success) return Ok(result);
@@ -24,13 +24,13 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("add")]
-        public IActionResult Add(PaymentAddDto paymentAddDto) // Test
-        {
-            var result = _paymentService.Add(paymentAddDto);
-            if (result.Success) return Ok(result);
+        //[HttpPost("add")]
+        //public IActionResult Add(PaymentAddDto paymentAddDto) // Test
+        //{
+        //    var result = _paymentService.Add(paymentAddDto);
+        //    if (result.Success) return Ok(result);
 
-            return BadRequest(result);
-        }
+        //    return BadRequest(result);
+        //}
     }
 }

@@ -7,12 +7,14 @@ namespace Core.Entities.Concrete
 {
     public class User : IEntity
     {
-        public int UserID { get; set; }
-        public string UserFirstName { get; set; }
-        public string UserLastName { get; set; }
-        public string UserEmail { get; set; }
-        public byte[] UserPasswordHash { get; set; }
-        public byte[] UserPasswordSalt { get; set; }
+        // SOLID PRENSIP
+        //DRY DONT REPEAT YOUR SELF
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
         public bool Status { get; set; }
     }
 

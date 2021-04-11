@@ -6,6 +6,6 @@ namespace Business.Abstract
     public interface IPaymentService
     {
         IResult test(); // Test
-        IResult Add(PaymentAddDto paymentAddDto);
+        //IResult Add(PaymentAddDto paymentAddDto);
     }
 }

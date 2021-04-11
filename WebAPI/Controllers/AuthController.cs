@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Results;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,13 +27,13 @@ namespace WebAPI.Controllers
             var userToLogin = _authService.Login(userForLoginDto);
             if (!userToLogin.Success)
             {
-                return BadRequest(userToLogin.Message);
+                return BadRequest(userToLogin);
             }
 
             var result = _authService.CreateAccessToken(userToLogin.Data);
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
 
             return BadRequest(result.Message);
@@ -57,6 +58,20 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
+      
+
+        [HttpGet("isauthenticated")]
+        public ActionResult IsAuthenticated(string userMail, string requiredRoles)
+        {
+            var requiredRolesList = !string.IsNullOrEmpty(requiredRoles)
+                ? requiredRoles.Split(',').ToList()
+                : null;
+
+            var result = _authService.IsAuthenticated(userMail, requiredRolesList);
+            if (result.Success) return Ok(result);
+
+            return Unauthorized(result.Message);
+        }
     }
 }
 

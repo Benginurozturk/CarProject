@@ -6,7 +6,10 @@ using Core.Aspects.Autofac.Validation;
 using Core.Entities.Concrete;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
+using Core.Utilities.Security.Hashing;
 using DataAccess.Abstract;
+using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,10 +19,18 @@ namespace Business.Concrete
     public class UserManager : IUserService
     {
         private IUserDal _userDal;
+        private readonly ICustomerDal _customerDal;
+        private readonly IFindeksDal _findeksDal;
+        private readonly IFindeksService _findeksService;
 
-        public UserManager(IUserDal userDal)
+
+        public UserManager(IUserDal userDal, IFindeksDal findeksDal, IFindeksService findeksService, ICustomerDal customerDal)
+          
         {
             _userDal = userDal;
+            _customerDal = customerDal;
+            _findeksDal = findeksDal;
+            _findeksService = findeksService;
         }
 
         [ValidationAspect(typeof(UserValidator))]
@@ -32,7 +43,7 @@ namespace Business.Concrete
         [SecuredOperation("admin")]
         public IResult Delete(User user)
         {
-            IResult result = BusinessRules.Run(CheckUserExists(user.UserID));
+            IResult result = BusinessRules.Run(CheckUserExists(user.Id));
             if (result != null)
             {
                 return result;
@@ -40,33 +51,32 @@ namespace Business.Concrete
             _userDal.Delete(user);
             return new SuccessResult(Messages.UserDeleted);
         }
-
+        [SecuredOperation("user.get,moderator,admin")]
         public IDataResult<List<User>> GetAll()
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.UserGetAllSuccess);
         }
-
+        [SecuredOperation("user.get,moderator,admin")]
         public IDataResult<User> GetById(int id)
         {
-            return new SuccessDataResult<User>(_userDal.Get(u => u.UserID == id), Messages.UserGetByIdSuccess);
+            return new SuccessDataResult<User>(_userDal.Get(u => u.Id == id), Messages.UserGetByIdSuccess);
         }
 
         public IDataResult<User> GetByMail(string email)
         {
-            return new SuccessDataResult<User>(_userDal.Get(u => u.UserEmail == email));
-
+            return new SuccessDataResult<User>(_userDal.Get(u => u.Email == email));
         }
 
         
-        public IDataResult<List<OperationClaimDto>> GetClaims(User user)
+        public IDataResult<List<OperationClaim>> GetClaims(User user)
         {
-            return new SuccessDataResult<List<OperationClaimDto>>(_userDal.GetClaims(user));
+            return new SuccessDataResult<List<OperationClaim>>(_userDal.GetClaims(user));
         }
 
         [ValidationAspect(typeof(UserValidator))]
         public IResult Update(User user)
         {
-            IResult result = BusinessRules.Run(CheckUserExists(user.UserID));
+            IResult result = BusinessRules.Run(CheckUserExists(user.Id));
             if (result != null)
             {
                 return result;
@@ -76,16 +86,76 @@ namespace Business.Concrete
             return new SuccessResult(Messages.UserUpdated);
         }
 
-        //business rules
-        private IResult CheckUserExists(int id)
+        private IResult[] CheckUserExists(int userID)
         {
-            var result = _userDal.Get(u => u.UserID == id);
-            if (result == null)
+            throw new NotImplementedException();
+        }
+
+        public IResult UpdateUserDetails(UserDetailForUpdateDto userDetailForUpdate)
+        {
+            var user = GetById(userDetailForUpdate.Id).Data;
+
+            if (!HashingHelper.VerifyPasswordHash(userDetailForUpdate.CurrentPassword, user.PasswordHash,
+                user.PasswordSalt)) return new ErrorResult(Messages.UserPasswordError);
+
+            user.FirstName = userDetailForUpdate.FirstName;
+            user.LastName = userDetailForUpdate.LastName;
+            if (!string.IsNullOrEmpty(userDetailForUpdate.NewPassword))
             {
-                return new ErrorResult(Messages.UserEmailAlreadyExists);
+                byte[] passwordHash, passwordSalt;
+                HashingHelper.CreatePasswordHash(userDetailForUpdate.NewPassword, out passwordHash, out passwordSalt);
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
             }
 
-            return new SuccessResult();
+            _userDal.Update(user);
+
+            var customer = _customerDal.Get(c => c.CustomerID == userDetailForUpdate.CustomerId);
+            customer.CompanyName = userDetailForUpdate.CompanyName;
+            _customerDal.Update(customer);
+
+            if (!string.IsNullOrEmpty(userDetailForUpdate.NationalIdentity))
+            {
+                var findeks = _findeksService.GetByCustomerId(userDetailForUpdate.CustomerId).Data;
+                if (findeks == null)
+                {
+                    var newFindeks = new Findeks
+                    {
+                        CustomerId = userDetailForUpdate.CustomerId,
+                        NationalIdentity = userDetailForUpdate.NationalIdentity
+                    };
+                    _findeksService.Add(newFindeks);
+                }
+                else
+                {
+                    findeks.NationalIdentity = userDetailForUpdate.NationalIdentity;
+                    var newFindeks = _findeksService.CalculateFindeksScore(findeks).Data;
+                    _findeksDal.Update(newFindeks);
+                }
+            }
+
+            return new SuccessResult(Messages.UserDetailsUpdated);
+        }
+
+        public IDataResult<UserDetailDto> GetUserDetailByMail(string email)
+        {
+            var userDetailDto = _userDal.GetUserDetail(email);
+            if (userDetailDto == null)
+                return new ErrorDataResult<UserDetailDto>(Messages.UserNotFoundError);
+
+            return new SuccessDataResult<UserDetailDto>(userDetailDto,Messages.UserGetByMailSuccess);
         }
     }
-}
+
+        //business rules
+        //private IResult CheckUserExists(int id)
+        //{
+        //    var result = _userDal.Get(u => u.UserID == id);
+        //    if (result == null)
+        //    {
+        //        return new ErrorResult(Messages.UserEmailAlreadyExists);
+        //    }
+
+        //    return new SuccessResult();
+        //}
+    }

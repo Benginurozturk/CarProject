@@ -21,8 +21,12 @@ namespace Business.Abstract
 
         IResult Delete(Rental rental);
 
-        IResult CheckReturnDate(int carId);
+        //IResult CheckReturnDate(int carId);
+        IResult CheckReturnDateByCarId(int carId);
 
         IResult IsRentable(Rental rental);
+        
+
+        IResult CheckFindeksScoreSufficiency(Rental rental);
     }
 }
